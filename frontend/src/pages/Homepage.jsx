@@ -6,24 +6,54 @@ import backgroundImage from '../pages/background.jpg'; // Gantilah dengan path y
 
 const BACKGROUNDS = {
     default: {
-        name: "Pink Grid",
-        style: { backgroundImage: "url('https://i.pinimg.com/736x/24/30/a2/2430a2caaeb14ae9bd35ffb46cfc5b7a.jpg')", backgroundSize: 'auto', backgroundRepeat: 'repeat', backgroundAttachment: 'fixed', minHeight: '100vh' }
+        name: "Pink Grid 🎀",
+        style: { 
+            backgroundColor: "#fff1f2",
+            backgroundImage: "linear-gradient(rgba(244, 63, 94, 0.15) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(244, 63, 94, 0.15) 1.5px, transparent 1.5px)",
+            backgroundSize: "30px 30px",
+            backgroundAttachment: 'fixed', 
+            minHeight: '100vh' 
+        }
     },
     kuromi: {
         name: "Kuromi 😈",
-        style: { backgroundImage: "url('https://i.pinimg.com/736x/16/c0/83/16c08365691097fa6089be282f1b747b.jpg')", backgroundSize: '300px', backgroundRepeat: 'repeat', backgroundAttachment: 'fixed', minHeight: '100vh' }
+        style: { 
+            backgroundColor: "#faf5ff",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 15c-2-3-7-3-9 0-2 3-2 7 0 10l9 9 9-9c2-3 2-7 0-10-2-3-7-3-9 0z' fill='%23c084fc' fill-opacity='0.3'/%3E%3Ccircle cx='10' cy='45' r='3' fill='%23c084fc' fill-opacity='0.2'/%3E%3Ccircle cx='50' cy='45' r='3' fill='%23c084fc' fill-opacity='0.2'/%3E%3C/svg%3E")`,
+            backgroundSize: '60px 60px',
+            backgroundAttachment: 'fixed', 
+            minHeight: '100vh' 
+        }
     },
     spiderman: {
         name: "Spider-Man 🕷️",
-        style: { backgroundImage: "url('https://i.pinimg.com/736x/bc/65/59/bc6559bc8b6ca260907d4b4a3a60c871.jpg')", backgroundSize: '300px', backgroundRepeat: 'repeat', backgroundAttachment: 'fixed', minHeight: '100vh' }
+        style: { 
+            backgroundColor: "#fef2f2",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 0 L40 80 M0 40 L80 40 M0 0 L80 80 M0 80 L80 0 M40 10 A30 30 0 0 0 10 40 M10 40 A30 30 0 0 0 40 70 M40 70 A30 30 0 0 0 70 40 M70 40 A30 30 0 0 0 40 10' fill='none' stroke='%23fca5a5' stroke-width='1.5' stroke-opacity='0.4'/%3E%3C/svg%3E")`,
+            backgroundSize: '80px 80px',
+            backgroundAttachment: 'fixed', 
+            minHeight: '100vh' 
+        }
     },
     cinnamoroll: {
         name: "Cinnamoroll ☁️",
-        style: { backgroundImage: "url('https://i.pinimg.com/736x/31/5f/aa/315faa9b343a413d72b2203672b1be70.jpg')", backgroundSize: '300px', backgroundRepeat: 'repeat', backgroundAttachment: 'fixed', minHeight: '100vh' }
+        style: { 
+            backgroundColor: "#f0f9ff",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M20 45 a10 10 0 0 1 20 0 a8 8 0 0 1 15 0 a10 10 0 0 1 10 10 L10 55 z' fill='%23bae6fd' fill-opacity='0.5'/%3E%3Cpath d='M60 20 L62 25 L67 25 L63 28 L65 33 L60 30 L55 33 L57 28 L53 25 L58 25 z' fill='%23fed7aa' fill-opacity='0.5'/%3E%3C/svg%3E")`,
+            backgroundSize: '80px 80px',
+            backgroundAttachment: 'fixed', 
+            minHeight: '100vh' 
+        }
     },
     doraemon: {
         name: "Doraemon 🐱",
-        style: { backgroundImage: "url('https://i.pinimg.com/736x/60/a4/09/60a409941a546d1bf0a531e21b22e13a.jpg')", backgroundSize: '300px', backgroundRepeat: 'repeat', backgroundAttachment: 'fixed', minHeight: '100vh' }
+        style: { 
+            backgroundColor: "#e0f2fe",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Ccircle cx='15' cy='15' r='5' fill='%2360a5fa' fill-opacity='0.3'/%3E%3Ccircle cx='45' cy='45' r='5' fill='%23facc15' fill-opacity='0.4'/%3E%3Ccircle cx='45' cy='15' r='2' fill='%2393c5fd' fill-opacity='0.3'/%3E%3Ccircle cx='15' cy='45' r='2' fill='%2393c5fd' fill-opacity='0.3'/%3E%3C/svg%3E")`,
+            backgroundSize: '60px 60px',
+            backgroundAttachment: 'fixed', 
+            minHeight: '100vh' 
+        }
     }
 };
 
