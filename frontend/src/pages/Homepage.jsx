@@ -7,19 +7,23 @@ import backgroundImage from '../pages/background.jpg'; // Gantilah dengan path y
 const BACKGROUNDS = {
     default: {
         name: "Pink Grid",
-        style: { backgroundImage: "url('https://i.pinimg.com/736x/24/30/a2/2430a2caaeb14ae9bd35ffb46cfc5b7a.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
+        style: { backgroundImage: "url('https://i.pinimg.com/736x/24/30/a2/2430a2caaeb14ae9bd35ffb46cfc5b7a.jpg')", backgroundSize: 'auto', backgroundRepeat: 'repeat', backgroundAttachment: 'fixed', minHeight: '100vh' }
     },
-    pastel: {
-        name: "Pastel Peach",
-        style: { background: "linear-gradient(135deg, #fbf2eb 0%, #e2d1c3 100%)", backgroundAttachment: 'fixed', minHeight: '100vh' }
+    kuromi: {
+        name: "Kuromi 😈",
+        style: { backgroundImage: "url('https://i.pinimg.com/736x/16/c0/83/16c08365691097fa6089be282f1b747b.jpg')", backgroundSize: '300px', backgroundRepeat: 'repeat', backgroundAttachment: 'fixed', minHeight: '100vh' }
     },
-    wood: {
-        name: "Clean Desk",
-        style: { backgroundImage: "url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200&auto=format&fit=crop')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
+    spiderman: {
+        name: "Spider-Man 🕷️",
+        style: { backgroundImage: "url('https://i.pinimg.com/736x/bc/65/59/bc6559bc8b6ca260907d4b4a3a60c871.jpg')", backgroundSize: '300px', backgroundRepeat: 'repeat', backgroundAttachment: 'fixed', minHeight: '100vh' }
     },
-    dark: {
-        name: "Mesh Dark",
-        style: { background: "radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%), #0b0f19", backgroundAttachment: 'fixed', minHeight: '100vh' }
+    cinnamoroll: {
+        name: "Cinnamoroll ☁️",
+        style: { backgroundImage: "url('https://i.pinimg.com/736x/31/5f/aa/315faa9b343a413d72b2203672b1be70.jpg')", backgroundSize: '300px', backgroundRepeat: 'repeat', backgroundAttachment: 'fixed', minHeight: '100vh' }
+    },
+    doraemon: {
+        name: "Doraemon 🐱",
+        style: { backgroundImage: "url('https://i.pinimg.com/736x/60/a4/09/60a409941a546d1bf0a531e21b22e13a.jpg')", backgroundSize: '300px', backgroundRepeat: 'repeat', backgroundAttachment: 'fixed', minHeight: '100vh' }
     }
 };
 
