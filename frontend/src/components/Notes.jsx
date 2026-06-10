@@ -4,32 +4,29 @@ import Note from './Note'
 const Notes = ({handleOpenModal}) => {
     const [notes, setNotes] = useState([])
 
-    const getNotes = async () => {
+    const getNotes = () => {
         try {
-            const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000"
-            const req = await fetch(`${apiBase}/api/notes`)
-            const res = await req.json()
-            if(res) {
-                setNotes(res.data)
+            const saved = localStorage.getItem("notes")
+            if(saved) {
+                setNotes(JSON.parse(saved))
+            } else {
+                setNotes([])
             }
         } catch (error) {
             alert(error.message)
         }
     }
 
-    const deleteNote = async (noteId) => {
+    const deleteNote = (noteId) => {
         const confirmDelete = confirm("Apa kamu mau menghapus note ini?")
         if(confirmDelete) {
             try {
-                const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000"
-                const req = await fetch(`${apiBase}/api/notes/${noteId}`, {
-                    method: 'DELETE'
-                })
-                const res = await req.json()
-                if(res) {
-                    alert(`Note dengan id = ${noteId} sudah dihapus`)
-                    setNotes(notes.filter(note => note.id !== noteId))
-                }
+                const saved = localStorage.getItem("notes")
+                const list = saved ? JSON.parse(saved) : []
+                const filtered = list.filter(note => note.id !== noteId)
+                localStorage.setItem("notes", JSON.stringify(filtered))
+                alert(`Note dengan id = ${noteId} sudah dihapus`)
+                setNotes(filtered)
             } catch (error) {
                 alert(error.message)
             }
@@ -41,14 +38,14 @@ const Notes = ({handleOpenModal}) => {
     }, [])
 
     return (
-        <section className="mt-10 grid grid-cols-notes gap-x-[20px] gap-y-[40px]">
+        <section className="mt-10 grid grid-cols-notes gap-x-[20px] gap-y-[40px] w-full">
             {notes.length > 0 ? notes.map(note => (
                 <Note key={note.id} {...note} deleteNote={() => deleteNote(note.id)} handleOpenModal={() => handleOpenModal(note.id)}/>
             )) : (
-                <p>Notes not exist anymore</p>
+                <p>Belum ada catatan.</p>
             )}
         </section>
     )
 }
 
-export default Notes
+export default Notes

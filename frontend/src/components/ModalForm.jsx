@@ -25,54 +25,58 @@ const ModalForm = ({isEdit, closeModal}) => {
         })
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
         try {
+            const saved = localStorage.getItem("notes")
+            const list = saved ? JSON.parse(saved) : []
+
             if(!isEdit) {
-                const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000"
-                const req = await fetch(`${apiBase}/api/notes`, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(values),
-                })
-                const res = await req.json()
-                if(res) {
-                    closeModal()
-                    window.location.reload()
+                const newNote = {
+                    id: Date.now(),
+                    judul: values.judul,
+                    tanggal: values.tanggal,
+                    isi: values.isi,
+                    tema: values.tema,
+                    createdAt: new Date().toISOString()
                 }
+                list.push(newNote)
+                localStorage.setItem("notes", JSON.stringify(list))
+                closeModal()
+                window.location.reload()
             } else {
-                const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000"
-                const req = await fetch(`${apiBase}/api/notes/${isEdit}`, {
-                    method: "PUT",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(values),
+                const updatedList = list.map(note => {
+                    if (note.id === Number(isEdit) || note.id === isEdit) {
+                        return {
+                            ...note,
+                            judul: values.judul,
+                            tanggal: values.tanggal,
+                            isi: values.isi,
+                            tema: values.tema
+                        }
+                    }
+                    return note
                 })
-                const res = await req.json()
-                if(res) {
-                    closeModal()
-                    window.location.reload()
-                }
+                localStorage.setItem("notes", JSON.stringify(updatedList))
+                closeModal()
+                window.location.reload()
             }
         } catch (error) {
             alert(error.message)
         }
     }
 
-    const getNote = async () => {
+    const getNote = () => {
         try {
-            const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000"
-            const req = await fetch(`${apiBase}/api/notes/${isEdit}`)
-            const res = await req.json()
-            if(res) {
+            const saved = localStorage.getItem("notes")
+            const list = saved ? JSON.parse(saved) : []
+            const found = list.find(note => note.id === Number(isEdit) || note.id === isEdit)
+            if(found) {
                 setValues({
-                    judul: res.data.judul,
-                    tanggal: new Date(res.data.tanggal).toLocaleDateString('en-CA'),
-                    isi: res.data.isi,
-                    tema: res.data.tema
+                    judul: found.judul,
+                    tanggal: new Date(found.tanggal).toLocaleDateString('en-CA'),
+                    isi: found.isi,
+                    tema: found.tema
                 })
             }
         } catch (error) {
