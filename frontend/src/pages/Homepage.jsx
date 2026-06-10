@@ -7,6 +7,7 @@ import backgroundImage from '../pages/background.jpg'; // Gantilah dengan path y
 const Homepage = () => {
     const [isEdit, setIsEdit] = useState(null);
     const [isModal, setIsModal] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
 
     return (
         <main className='max-w-[1200px] mx-auto pt-5' 
@@ -14,7 +15,7 @@ const Homepage = () => {
         >
             {/* Search Section */}
             <div className='mb-10'>
-                <SearchInput />
+                <SearchInput searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             </div>
 
             <div className='mt-14'>
@@ -43,8 +44,9 @@ const Homepage = () => {
                 {/* MyNotes Section */}
                 <div className='bg-white bg-opacity-90 p-10 rounded-lg shadow-lg mb-10'>
                     <h2 className='text-3xl font-semibold mb-5'>Daftar Catatan</h2>
-                    <div className='flex flex-wrap gap-8'>
+                    <div className='flex flex-wrap gap-8 w-full'>
                         <Notes 
+                            searchQuery={searchQuery}
                             handleOpenModal={(noteId) => {
                                 setIsModal(true);
                                 setIsEdit(noteId);

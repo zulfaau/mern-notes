@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Note from './Note'
 
-const Notes = ({handleOpenModal}) => {
+const Notes = ({handleOpenModal, searchQuery = ""}) => {
     const [notes, setNotes] = useState([])
 
     const getNotes = () => {
@@ -37,9 +37,14 @@ const Notes = ({handleOpenModal}) => {
         getNotes()
     }, [])
 
+    const filteredNotes = notes.filter(note => 
+        (note.judul || "").toLowerCase().includes(searchQuery.toLowerCase()) || 
+        (note.isi || "").toLowerCase().includes(searchQuery.toLowerCase())
+    )
+
     return (
         <section className="mt-10 grid grid-cols-notes gap-x-[20px] gap-y-[40px] w-full">
-            {notes.length > 0 ? notes.map(note => (
+            {filteredNotes.length > 0 ? filteredNotes.map(note => (
                 <Note key={note.id} {...note} deleteNote={() => deleteNote(note.id)} handleOpenModal={() => handleOpenModal(note.id)}/>
             )) : (
                 <p>Belum ada catatan.</p>
