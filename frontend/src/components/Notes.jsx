@@ -6,7 +6,8 @@ const Notes = ({handleOpenModal}) => {
 
     const getNotes = async () => {
         try {
-            const req = await fetch("http://localhost:5000/api/notes")
+            const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000"
+            const req = await fetch(`${apiBase}/api/notes`)
             const res = await req.json()
             if(res) {
                 setNotes(res.data)
@@ -20,7 +21,8 @@ const Notes = ({handleOpenModal}) => {
         const confirmDelete = confirm("Apa kamu mau menghapus note ini?")
         if(confirmDelete) {
             try {
-                const req = await fetch(`http://localhost:5000/api/notes/${noteId}`, {
+                const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000"
+                const req = await fetch(`${apiBase}/api/notes/${noteId}`, {
                     method: 'DELETE'
                 })
                 const res = await req.json()

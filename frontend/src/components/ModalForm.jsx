@@ -29,7 +29,8 @@ const ModalForm = ({isEdit, closeModal}) => {
         e.preventDefault()
         try {
             if(!isEdit) {
-                const req = await fetch("http://localhost:5000/api/notes", {
+                const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000"
+                const req = await fetch(`${apiBase}/api/notes`, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
@@ -42,7 +43,8 @@ const ModalForm = ({isEdit, closeModal}) => {
                     window.location.reload()
                 }
             } else {
-                const req = await fetch(`http://localhost:5000/api/notes/${isEdit}`, {
+                const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000"
+                const req = await fetch(`${apiBase}/api/notes/${isEdit}`, {
                     method: "PUT",
                     headers: {
                         'Content-Type': 'application/json'
@@ -62,7 +64,8 @@ const ModalForm = ({isEdit, closeModal}) => {
 
     const getNote = async () => {
         try {
-            const req = await fetch(`http://localhost:5000/api/notes/${isEdit}`)
+            const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000"
+            const req = await fetch(`${apiBase}/api/notes/${isEdit}`)
             const res = await req.json()
             if(res) {
                 setValues({
