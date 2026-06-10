@@ -33,6 +33,23 @@ const Notes = ({handleOpenModal, searchQuery = ""}) => {
         }
     }
 
+    const togglePin = (noteId) => {
+        try {
+            const saved = localStorage.getItem("notes")
+            const list = saved ? JSON.parse(saved) : []
+            const updated = list.map(note => {
+                if (note.id === noteId) {
+                    return { ...note, pinned: !note.pinned }
+                }
+                return note
+            })
+            localStorage.setItem("notes", JSON.stringify(updated))
+            setNotes(updated)
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
     useEffect(() => {
         getNotes()
     }, [])
@@ -42,10 +59,22 @@ const Notes = ({handleOpenModal, searchQuery = ""}) => {
         (note.isi || "").toLowerCase().includes(searchQuery.toLowerCase())
     )
 
+    const sortedNotes = [...filteredNotes].sort((a, b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        return 0;
+    })
+
     return (
         <section className="mt-10 grid grid-cols-notes gap-x-[20px] gap-y-[40px] w-full">
-            {filteredNotes.length > 0 ? filteredNotes.map(note => (
-                <Note key={note.id} {...note} deleteNote={() => deleteNote(note.id)} handleOpenModal={() => handleOpenModal(note.id)}/>
+            {sortedNotes.length > 0 ? sortedNotes.map(note => (
+                <Note 
+                    key={note.id} 
+                    {...note} 
+                    deleteNote={() => deleteNote(note.id)} 
+                    handleOpenModal={() => handleOpenModal(note.id)}
+                    togglePin={() => togglePin(note.id)}
+                />
             )) : (
                 <p>Belum ada catatan.</p>
             )}
