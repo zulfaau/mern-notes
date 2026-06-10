@@ -6,54 +6,24 @@ import backgroundImage from '../pages/background.jpg'; // Gantilah dengan path y
 
 const BACKGROUNDS = {
     default: {
-        name: "Pink Grid 🎀",
-        style: { 
-            backgroundColor: "#fff1f2",
-            backgroundImage: "linear-gradient(rgba(244, 63, 94, 0.15) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(244, 63, 94, 0.15) 1.5px, transparent 1.5px)",
-            backgroundSize: "30px 30px",
-            backgroundAttachment: 'fixed', 
-            minHeight: '100vh' 
-        }
+        name: "Powerpuff Girl 💖",
+        style: { backgroundImage: "url('/powerpuff.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
     },
-    kuromi: {
-        name: "Kuromi 😈",
-        style: { 
-            backgroundColor: "#faf5ff",
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 15c-2-3-7-3-9 0-2 3-2 7 0 10l9 9 9-9c2-3 2-7 0-10-2-3-7-3-9 0z' fill='%23c084fc' fill-opacity='0.3'/%3E%3Ccircle cx='10' cy='45' r='3' fill='%23c084fc' fill-opacity='0.2'/%3E%3Ccircle cx='50' cy='45' r='3' fill='%23c084fc' fill-opacity='0.2'/%3E%3C/svg%3E")`,
-            backgroundSize: '60px 60px',
-            backgroundAttachment: 'fixed', 
-            minHeight: '100vh' 
-        }
+    gedung: {
+        name: "City Heights 🏙️",
+        style: { backgroundImage: "url('/gedung.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
     },
     spiderman: {
         name: "Spider-Man 🕷️",
-        style: { 
-            backgroundColor: "#fef2f2",
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 0 L40 80 M0 40 L80 40 M0 0 L80 80 M0 80 L80 0 M40 10 A30 30 0 0 0 10 40 M10 40 A30 30 0 0 0 40 70 M40 70 A30 30 0 0 0 70 40 M70 40 A30 30 0 0 0 40 10' fill='none' stroke='%23fca5a5' stroke-width='1.5' stroke-opacity='0.4'/%3E%3C/svg%3E")`,
-            backgroundSize: '80px 80px',
-            backgroundAttachment: 'fixed', 
-            minHeight: '100vh' 
-        }
+        style: { backgroundImage: "url('/spiderman.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
     },
-    cinnamoroll: {
-        name: "Cinnamoroll ☁️",
-        style: { 
-            backgroundColor: "#f0f9ff",
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M20 45 a10 10 0 0 1 20 0 a8 8 0 0 1 15 0 a10 10 0 0 1 10 10 L10 55 z' fill='%23bae6fd' fill-opacity='0.5'/%3E%3Cpath d='M60 20 L62 25 L67 25 L63 28 L65 33 L60 30 L55 33 L57 28 L53 25 L58 25 z' fill='%23fed7aa' fill-opacity='0.5'/%3E%3C/svg%3E")`,
-            backgroundSize: '80px 80px',
-            backgroundAttachment: 'fixed', 
-            minHeight: '100vh' 
-        }
+    shinchan: {
+        name: "Shin-chan 🏊",
+        style: { backgroundImage: "url('/shinchan.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
     },
-    doraemon: {
-        name: "Doraemon 🐱",
-        style: { 
-            backgroundColor: "#e0f2fe",
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Ccircle cx='15' cy='15' r='5' fill='%2360a5fa' fill-opacity='0.3'/%3E%3Ccircle cx='45' cy='45' r='5' fill='%23facc15' fill-opacity='0.4'/%3E%3Ccircle cx='45' cy='15' r='2' fill='%2393c5fd' fill-opacity='0.3'/%3E%3Ccircle cx='15' cy='45' r='2' fill='%2393c5fd' fill-opacity='0.3'/%3E%3C/svg%3E")`,
-            backgroundSize: '60px 60px',
-            backgroundAttachment: 'fixed', 
-            minHeight: '100vh' 
-        }
+    hirono: {
+        name: "Hirono 🧸",
+        style: { backgroundImage: "url('/hirono.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
     }
 };
 
@@ -123,13 +93,11 @@ const Homepage = () => {
                 </div>
 
                 <div className='mt-14'>
-                    {/* Header Section */}
-                    <div className='flex flex-col md:flex-row items-center justify-between p-10 rounded-lg shadow-lg mb-10'
-                      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'bottom'}}
-                    >
+                    {/* Header Section (Translucent Glassmorphism so it never clashes with themes) */}
+                    <div className='flex flex-col md:flex-row items-center justify-between p-10 rounded-2xl shadow-lg mb-10 bg-white bg-opacity-75 backdrop-blur-md border border-white border-opacity-40'>
                         <div className='flex flex-col'>
-                            <h1 className='text-5xl text-gray-800 font-semibold mb-3'>MyNotes</h1>
-                            <p className='text-xl text-gray-600'>Simpan catatan penting kamu dengan mudah!</p>
+                            <h1 className='text-5xl text-gray-800 font-bold mb-3 tracking-tight'>MyNotes</h1>
+                            <p className='text-xl text-gray-600 font-medium'>Simpan catatan penting kamu dengan mudah!</p>
                         </div>
                     </div>
 
