@@ -24,8 +24,9 @@ async function dbInit() {
       // Buat koneksi ke MySQL
         const connection = await mysql.createConnection(connectionConfig);
     
-        // Baca file init.sql
-        const initSql = await fs.readFile('config/init.sql', 'utf8');
+        // Baca file init.sql secara aman untuk local dan Vercel
+        const path = require('path');
+        const initSql = await fs.readFile(path.join(__dirname, 'init.sql'), 'utf8');
     
         // Eksekusi init.sql
         await connection.query(initSql);
