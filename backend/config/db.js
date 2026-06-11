@@ -19,6 +19,6 @@ const connectionConfig = process.env.MYSQL_URL
             : undefined
       };
 
-const connection = mysql.createConnection(connectionConfig);
+const connection = mysql.createPool(connectionConfig);
 
 module.exports = connection
