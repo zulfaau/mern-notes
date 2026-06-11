@@ -2,165 +2,73 @@ import React, { useState } from 'react';
 import Notes from '../components/Notes';
 import ModalForm from '../components/ModalForm';
 import SearchInput from '../components/SearchInput';
-import backgroundImage from '../pages/background.jpg'; // Gantilah dengan path yang benar
-
-const BACKGROUNDS = {
-    default: {
-        name: "Powerpuff Girl 💖",
-        style: { backgroundImage: "url('/powerpuff.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
-    },
-    gedung: {
-        name: "City Heights 🏙️",
-        style: { backgroundImage: "url('/gedung.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
-    },
-    spiderman: {
-        name: "Spider-Man 🕷️",
-        style: { backgroundImage: "url('/spiderman.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
-    },
-    shinchan: {
-        name: "Shin-chan 🏊",
-        style: { backgroundImage: "url('/shinchan.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
-    },
-    hirono: {
-        name: "Hirono 🧸",
-        style: { backgroundImage: "url('/hirono.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh' }
-    }
-};
+import { LuFileText } from "react-icons/lu";
 
 const Homepage = () => {
     const [isEdit, setIsEdit] = useState(null);
     const [isModal, setIsModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    const [background, setBackground] = useState(localStorage.getItem("note_bg") || "default");
+    const [categoryFilter, setCategoryFilter] = useState("Semua");
 
-    const exportNotes = () => {
-        try {
-            const saved = localStorage.getItem("notes") || "[]"
-            const blob = new Blob([saved], { type: "application/json" })
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement("a")
-            a.href = url
-            a.download = `MyNotes_Backup_${new Date().toISOString().split('T')[0]}.json`
-            document.body.appendChild(a)
-            a.click()
-            document.body.removeChild(a)
-            URL.revokeObjectURL(url)
-        } catch (error) {
-            alert("Gagal mengekspor catatan: " + error.message)
-        }
-    }
-
-    const importNotes = (e) => {
-        const file = e.target.files[0]
-        if (!file) return
-        const reader = new FileReader()
-        reader.onload = (event) => {
-            try {
-                const importedData = JSON.parse(event.target.result)
-                if (Array.isArray(importedData)) {
-                    const overwrite = confirm("Apakah Anda ingin mengganti semua catatan yang ada dengan catatan dari backup? (Pilih Cancel untuk menggabungkannya)")
-                    let finalNotes = []
-                    const saved = localStorage.getItem("notes")
-                    const currentNotes = saved ? JSON.parse(saved) : []
-
-                    if (overwrite) {
-                         finalNotes = importedData
-                    } else {
-                         const currentIds = new Set(currentNotes.map(n => n.id))
-                         finalNotes = [...currentNotes, ...importedData.filter(n => !currentIds.has(n.id))]
-                    }
-                    localStorage.setItem("notes", JSON.stringify(finalNotes))
-                    alert("Catatan berhasil diimpor!")
-                    window.location.reload()
-                } else {
-                    alert("Format file backup tidak valid.")
-                }
-            } catch (error) {
-                alert("Gagal membaca file backup: " + error.message)
-            }
-        }
-        reader.readAsText(file)
-    }
-
-    const currentBgStyle = BACKGROUNDS[background]?.style || BACKGROUNDS.default.style;
+    const categories = ["Semua", "Pribadi", "Pekerjaan", "Ide", "Tugas", "Lainnya"];
 
     return (
-        <main className='w-full pt-5 px-4 md:px-8 transition-all duration-300' style={currentBgStyle}>
-            <div className='max-w-[1200px] mx-auto'>
-                {/* Search Section */}
-                <div className='mb-10'>
-                    <SearchInput searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                </div>
-
-                <div className='mt-14'>
-                    {/* Header Section (Translucent Glassmorphism so it never clashes with themes) */}
-                    <div className='flex flex-col md:flex-row items-center justify-between p-10 rounded-2xl shadow-lg mb-10 bg-white bg-opacity-75 backdrop-blur-md border border-white border-opacity-40'>
-                        <div className='flex flex-col'>
-                            <h1 className='text-5xl text-gray-800 font-bold mb-3 tracking-tight'>MyNotes</h1>
-                            <p className='text-xl text-gray-600 font-medium'>Simpan catatan penting kamu dengan mudah!</p>
+        <main className='min-h-screen bg-[#f8fafc] w-full pt-8 pb-16 px-4 md:px-8 font-sans antialiased text-[#0f172a]'>
+            <div className='max-w-[1000px] mx-auto'>
+                {/* Header Section */}
+                <header className='flex items-center justify-between mb-8 pb-6 border-b border-[#e2e8f0]'>
+                    <div className='flex items-center space-x-3'>
+                        <div className='p-2.5 bg-blue-50 text-blue-600 rounded-xl'>
+                            <LuFileText className='text-3xl' />
+                        </div>
+                        <div>
+                            <h1 className='text-2xl font-bold tracking-tight text-[#0f172a]'>MyNotes</h1>
+                            <p className='text-sm text-gray-500 font-medium'>Kelola catatan Anda dengan mudah</p>
                         </div>
                     </div>
+                    <button 
+                        onClick={() => setIsModal(true)}
+                        className='bg-[#0f172a] hover:bg-[#1e293b] text-white rounded-xl py-2.5 px-5 font-semibold text-sm shadow-sm transition-all duration-200 flex items-center space-x-2'
+                    >
+                        <span className='text-lg'>+</span>
+                        <span>Buat Catatan</span>
+                    </button>
+                </header>
 
-                    {/* Add Note & Controls Button */}
-                    <div className='flex flex-wrap items-center justify-between gap-4 mb-10 bg-white bg-opacity-95 p-6 rounded-2xl shadow-md'>
-                        <button 
-                            className='bg-blue-500 hover:bg-blue-600 text-white rounded-full py-3 px-6 font-semibold shadow-sm transition duration-300 text-lg flex items-center space-x-2'
-                            onClick={() => setIsModal(true)}
-                        >
-                            <span>Tambah catatan</span>
-                        </button>
-
-                        {/* Background Switcher */}
-                        <div className='flex flex-wrap items-center gap-2 bg-gray-100 p-2 rounded-2xl md:rounded-full'>
-                            <span className='text-sm text-gray-500 font-medium ml-2'>Tema:</span>
-                            {Object.keys(BACKGROUNDS).map((key) => (
-                                <button
-                                    key={key}
-                                    onClick={() => {
-                                        setBackground(key);
-                                        localStorage.setItem("note_bg", key);
-                                    }}
-                                    className={`px-3.5 py-1 rounded-full text-xs font-semibold transition duration-200 ${background === key ? 'bg-blue-500 text-white shadow-sm' : 'text-gray-700 hover:bg-gray-200'}`}
-                                >
-                                    {BACKGROUNDS[key].name}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* Backup & Restore */}
-                        <div className='flex items-center space-x-3'>
+                {/* Search & Filter Container Card */}
+                <section className='bg-white border border-[#e2e8f0] rounded-2xl p-5 shadow-sm mb-6'>
+                    <div className='mb-4'>
+                        <SearchInput searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                    </div>
+                    {/* Category Filter Badges */}
+                    <div className='flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100'>
+                        {categories.map((cat) => (
                             <button
-                                onClick={exportNotes}
-                                className='bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold py-2 px-5 rounded-full transition duration-300 shadow-sm'
+                                key={cat}
+                                onClick={() => setCategoryFilter(cat)}
+                                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                                    categoryFilter === cat
+                                        ? 'bg-[#0f172a] text-white'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                }`}
                             >
-                                Backup (.json)
+                                {cat}
                             </button>
-                            <label className='bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold py-2 px-5 rounded-full cursor-pointer transition duration-300 shadow-sm'>
-                                Restore
-                                <input 
-                                    type="file" 
-                                    accept=".json" 
-                                    onChange={importNotes} 
-                                    className="hidden" 
-                                />
-                            </label>
-                        </div>
+                        ))}
                     </div>
+                </section>
 
-                    {/* MyNotes Section */}
-                    <div className='bg-white bg-opacity-90 p-10 rounded-lg shadow-lg mb-10'>
-                        <h2 className='text-3xl font-semibold mb-5'>Daftar Catatan</h2>
-                        <div className='flex flex-wrap gap-8 w-full'>
-                            <Notes 
-                                searchQuery={searchQuery}
-                                handleOpenModal={(noteId) => {
-                                    setIsModal(true);
-                                    setIsEdit(noteId);
-                                }}
-                            />
-                        </div>
-                    </div>
-                </div>
+                {/* List Notes Section */}
+                <section>
+                    <Notes 
+                        searchQuery={searchQuery}
+                        categoryFilter={categoryFilter}
+                        handleOpenModal={(noteId) => {
+                            setIsModal(true);
+                            setIsEdit(noteId);
+                        }}
+                    />
+                </section>
             </div>
 
             {/* Modal Form */}

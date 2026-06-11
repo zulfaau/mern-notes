@@ -1,52 +1,66 @@
 import React, { useState, useEffect } from 'react'
 import Note from './Note'
 
-const Notes = ({handleOpenModal, searchQuery = ""}) => {
+const API_BASE_URL = "http://localhost:5000/api";
+
+const Notes = ({handleOpenModal, searchQuery = "", categoryFilter = "Semua"}) => {
     const [notes, setNotes] = useState([])
 
-    const getNotes = () => {
+    const CATEGORY_TO_TEMA = {
+        "Pribadi": "blue",
+        "Pekerjaan": "green",
+        "Ide": "pink",
+        "Tugas": "orange",
+        "Lainnya": "stone"
+    };
+
+    const getNotes = async () => {
         try {
-            const saved = localStorage.getItem("notes")
-            if(saved) {
-                setNotes(JSON.parse(saved))
+            const res = await fetch(`${API_BASE_URL}/notes`)
+            const json = await res.json()
+            if (res.ok) {
+                setNotes(json.data || [])
             } else {
-                setNotes([])
+                alert(json.message || "Gagal mengambil catatan")
             }
         } catch (error) {
-            alert(error.message)
+            alert("Koneksi gagal: " + error.message)
         }
     }
 
-    const deleteNote = (noteId) => {
+    const deleteNote = async (noteId) => {
         const confirmDelete = confirm("Apa kamu mau menghapus note ini?")
         if(confirmDelete) {
             try {
-                const saved = localStorage.getItem("notes")
-                const list = saved ? JSON.parse(saved) : []
-                const filtered = list.filter(note => note.id !== noteId)
-                localStorage.setItem("notes", JSON.stringify(filtered))
-                alert(`Note dengan id = ${noteId} sudah dihapus`)
-                setNotes(filtered)
+                const res = await fetch(`${API_BASE_URL}/notes/${noteId}`, {
+                    method: 'DELETE'
+                })
+                const json = await res.json()
+                if (res.ok) {
+                    alert(`Note berhasil dihapus`)
+                    getNotes()
+                } else {
+                    alert(json.message || "Gagal menghapus note")
+                }
             } catch (error) {
-                alert(error.message)
+                alert("Koneksi gagal: " + error.message)
             }
         }
     }
 
-    const togglePin = (noteId) => {
+    const togglePin = async (noteId) => {
         try {
-            const saved = localStorage.getItem("notes")
-            const list = saved ? JSON.parse(saved) : []
-            const updated = list.map(note => {
-                if (note.id === noteId) {
-                    return { ...note, pinned: !note.pinned }
-                }
-                return note
+            const res = await fetch(`${API_BASE_URL}/notes/${noteId}/pin`, {
+                method: 'PUT'
             })
-            localStorage.setItem("notes", JSON.stringify(updated))
-            setNotes(updated)
+            const json = await res.json()
+            if (res.ok) {
+                getNotes()
+            } else {
+                alert(json.message || "Gagal mengubah status pin")
+            }
         } catch (error) {
-            alert(error.message)
+            alert("Koneksi gagal: " + error.message)
         }
     }
 
@@ -54,10 +68,17 @@ const Notes = ({handleOpenModal, searchQuery = ""}) => {
         getNotes()
     }, [])
 
-    const filteredNotes = notes.filter(note => 
-        (note.judul || "").toLowerCase().includes(searchQuery.toLowerCase()) || 
-        (note.isi || "").toLowerCase().includes(searchQuery.toLowerCase())
-    )
+    const filteredNotes = notes.filter(note => {
+        const matchesSearch = (note.judul || "").toLowerCase().includes(searchQuery.toLowerCase()) || 
+                             (note.isi || "").toLowerCase().includes(searchQuery.toLowerCase());
+        
+        if (categoryFilter === "Semua") {
+            return matchesSearch;
+        } else {
+            const targetTema = CATEGORY_TO_TEMA[categoryFilter];
+            return matchesSearch && note.tema === targetTema;
+        }
+    })
 
     const sortedNotes = [...filteredNotes].sort((a, b) => {
         if (a.pinned && !b.pinned) return -1;
@@ -66,19 +87,27 @@ const Notes = ({handleOpenModal, searchQuery = ""}) => {
     })
 
     return (
-        <section className="mt-10 grid grid-cols-notes gap-x-[20px] gap-y-[40px] w-full">
-            {sortedNotes.length > 0 ? sortedNotes.map(note => (
-                <Note 
-                    key={note.id} 
-                    {...note} 
-                    deleteNote={() => deleteNote(note.id)} 
-                    handleOpenModal={() => handleOpenModal(note.id)}
-                    togglePin={() => togglePin(note.id)}
-                />
-            )) : (
-                <p>Belum ada catatan.</p>
-            )}
-        </section>
+        <div>
+            <div className='text-sm font-semibold text-slate-400 mb-4 tracking-tight'>
+                {sortedNotes.length} catatan ditemukan
+            </div>
+            
+            <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
+                {sortedNotes.length > 0 ? sortedNotes.map(note => (
+                    <Note 
+                        key={note.id} 
+                        {...note} 
+                        deleteNote={() => deleteNote(note.id)} 
+                        handleOpenModal={() => handleOpenModal(note.id)}
+                        togglePin={() => togglePin(note.id)}
+                    />
+                )) : (
+                    <p className="col-span-full text-slate-400 text-sm font-medium py-8 text-center bg-slate-50 border border-dashed border-slate-200 rounded-2xl">
+                        Belum ada catatan.
+                    </p>
+                )}
+            </section>
+        </div>
     )
 }
 

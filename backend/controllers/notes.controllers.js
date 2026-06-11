@@ -67,10 +67,10 @@ const editNote = async (req, res) => {
     }
     const query = `
         UPDATE notes
-        SET judul = '${judul}', tanggal = '${tanggal}', isi = '${isi}', tema = '${tema}'
-        WHERE id = ${+noteId}
+        SET judul = ?, tanggal = ?, isi = ?, tema = ?
+        WHERE id = ?
     `
-    connection.query(query, (err, row) => {
+    connection.query(query, [judul, tanggal, isi, tema, +noteId], (err, row) => {
         if(err) {
             return res.status(400).json({
                 message: "Error"
@@ -87,12 +87,29 @@ const editNote = async (req, res) => {
     })
 }
 
+const togglePinNote = async (req, res) => {
+    const noteId = req.params.noteId
+    const query = `
+        UPDATE notes SET pinned = NOT COALESCE(pinned, 0) WHERE id = ?
+    `
+    connection.query(query, [noteId], (err, row) => {
+        if(err) {
+            return res.status(400).json({
+                message: "Error"
+            })
+        }
+        res.status(200).json({
+            message: "Status pin berhasil diperbarui"
+        })
+    })
+}
+
 const deleteNote = async (req, res) => {
     const noteId = req.params.noteId
     const query = `
-        DELETE FROM notes WHERE id = ${noteId}
+        DELETE FROM notes WHERE id = ?
     `
-    connection.query(query, (err) => {
+    connection.query(query, [noteId], (err) => {
         if(err) {
             return res.status(400).json({
                 message: "Error"
@@ -109,5 +126,6 @@ module.exports = {
     getNote,
     postNote,
     editNote,
+    togglePinNote,
     deleteNote
 }

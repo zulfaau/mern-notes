@@ -21,6 +21,18 @@ async function dbInit() {
     
         // Eksekusi init.sql
         await connection.query(initSql);
+        
+        // Tambah kolom pinned jika tabel sudah ada sebelumnya tanpa kolom pinned
+        try {
+            await connection.query("ALTER TABLE notes ADD COLUMN pinned TINYINT(1) DEFAULT 0;");
+            console.log('Kolom pinned berhasil ditambahkan ke tabel notes');
+        } catch (err) {
+            // Abaikan error 1060 (Duplicate column name) karena berarti kolom sudah ada
+            if (err.errno !== 1060) {
+                console.error('Error saat menambahkan kolom pinned:', err);
+            }
+        }
+
         console.log('Database and table created successfully');
     
         // Tutup koneksi

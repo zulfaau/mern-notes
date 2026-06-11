@@ -1,30 +1,88 @@
 import React from 'react'
-import { MdEdit, MdDelete, MdPushPin } from "react-icons/md"
+import { LuFileEdit, LuTrash2, LuPin } from "react-icons/lu"
 
+const CATEGORY_MAP = {
+    blue: { name: "Pribadi", badgeClass: "bg-blue-50 text-blue-600" },
+    green: { name: "Pekerjaan", badgeClass: "bg-emerald-50 text-emerald-600" },
+    pink: { name: "Ide", badgeClass: "bg-purple-50 text-purple-600" },
+    orange: { name: "Tugas", badgeClass: "bg-orange-50 text-orange-600" },
+    stone: { name: "Lainnya", badgeClass: "bg-slate-100 text-slate-600" }
+};
+
+const getRelativeTime = (dateString) => {
+    try {
+        const now = new Date();
+        const diffMs = now - new Date(dateString);
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (isNaN(diffMs)) return "beberapa saat lalu";
+        if (diffMins < 1) return "baru saja";
+        if (diffMins < 60) return `${diffMins} menit yang lalu`;
+        if (diffHours < 24) return `sekitar ${diffHours} jam yang lalu`;
+        return `${diffDays} hari yang lalu`;
+    } catch (e) {
+        return "baru saja";
+    }
+};
 
 const Note = ({id, judul, tanggal, isi, tema, pinned, deleteNote, handleOpenModal, togglePin}) => {
+    const category = CATEGORY_MAP[tema] || CATEGORY_MAP.stone;
+
     return (
-        <article className={`flex justify-between rounded-[20px] p-6 min-h-[250px] bg-${tema}-400 relative shadow-md`}>
-            <section className='flex flex-col self-start pr-8'>
-                <h1 className="text-[#1e201e] font-medium tracking-tight text-2xl self-start">
-                    {judul}
-                </h1>
-                <p className='mt-2 text-[#1e201e] text-sm opacity-80'>{new Date(tanggal).toLocaleDateString()}</p>
-                <p className='mt-2 text-[#1e201e] whitespace-pre-line'>{isi}</p>
-            </section>
-            <section className="flex self-end justify-end w-max">
-                <div className="flex flex-col space-y-3">
-                    <div className={`group rounded-full p-2.5 flex items-center justify-center cursor-pointer transition duration-200 ease-in ${pinned ? 'bg-white shadow-sm' : 'bg-[#1e201e] hover:bg-white'}`} onClick={togglePin}>
-                        <MdPushPin className={`text-2xl transition duration-200 ease-in ${pinned ? 'text-[#1e201e] transform rotate-45' : 'text-white group-hover:text-[#1e201e]'}`}/>
-                    </div>
-                    <div className="group bg-[#1e201e] rounded-full p-2.5 flex items-center justify-center cursor-pointer hover:bg-white transition duration-200 ease-in" onClick={handleOpenModal}>
-                        <MdEdit className="text-2xl text-white group-hover:text-[#1e201e] transition duration-200 ease-in"/>
-                    </div>
-                    <div className="group bg-[#1e201e] rounded-full p-2.5 flex items-center justify-center cursor-pointer hover:bg-white transition duration-200 ease-in" onClick={deleteNote}>
-                        <MdDelete className="text-2xl text-white group-hover:text-[#1e201e] transition duration-200 ease-in"/>
-                    </div>
+        <article className="bg-white border border-[#e2e8f0] rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[220px] relative">
+            <section className="flex flex-col flex-1">
+                {/* Header Card */}
+                <div className="flex items-start justify-between gap-2">
+                    <h3 className="font-bold text-[#0f172a] text-lg tracking-tight line-clamp-1">
+                        {judul}
+                    </h3>
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide ${category.badgeClass} shrink-0`}>
+                        {category.name}
+                    </span>
                 </div>
+
+                {/* Content */}
+                <p className="mt-3 text-slate-500 text-sm leading-relaxed whitespace-pre-line line-clamp-5 flex-1">
+                    {isi}
+                </p>
             </section>
+
+            {/* Footer Card */}
+            <footer className="mt-5 pt-4 border-t border-slate-50 flex items-center justify-between text-slate-400">
+                <span className="text-[11px] font-medium text-slate-400">
+                    {getRelativeTime(tanggal)}
+                </span>
+                
+                <div className="flex items-center space-x-2">
+                    <button 
+                        onClick={togglePin} 
+                        title={pinned ? "Unpin Catatan" : "Pin Catatan"}
+                        className={`p-1.5 rounded-lg transition duration-200 ${
+                            pinned 
+                                ? 'bg-amber-50 text-amber-500' 
+                                : 'hover:bg-slate-100 hover:text-slate-600'
+                        }`}
+                    >
+                        <LuPin className="text-base" />
+                    </button>
+                    <button 
+                        onClick={handleOpenModal} 
+                        title="Edit Catatan"
+                        className="p-1.5 rounded-lg hover:bg-slate-100 hover:text-slate-600 transition duration-200"
+                    >
+                        <LuFileEdit className="text-base" />
+                    </button>
+                    <button 
+                        onClick={deleteNote} 
+                        title="Hapus Catatan"
+                        className="p-1.5 rounded-lg hover:bg-red-50 hover:text-red-600 transition duration-200"
+                    >
+                        <LuTrash2 className="text-base" />
+                    </button>
+                </div>
+            </footer>
         </article>
     )
 }
