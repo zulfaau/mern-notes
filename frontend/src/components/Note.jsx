@@ -1,5 +1,5 @@
 import React from 'react'
-import { LuFileEdit, LuTrash2, LuPin } from "react-icons/lu"
+import { LuPencil, LuTrash2, LuPin } from "react-icons/lu"
 
 const CATEGORY_MAP = {
     blue: { name: "Pribadi", badgeClass: "bg-blue-50 text-blue-600" },
@@ -72,7 +72,7 @@ const Note = ({id, judul, tanggal, isi, tema, pinned, deleteNote, handleOpenModa
                         title="Edit Catatan"
                         className="p-1.5 rounded-lg hover:bg-slate-100 hover:text-slate-600 transition duration-200"
                     >
-                        <LuFileEdit className="text-base" />
+                        <LuPencil className="text-base" />
                     </button>
                     <button 
                         onClick={deleteNote} 
