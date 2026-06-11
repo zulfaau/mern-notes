@@ -7,7 +7,7 @@ const getNotes = async (req, res) => {
     connection.query(query, async (err, rows) => {
         if(err) {
             return res.status(400).json({
-                message: "Error"
+                message: "Error: " + err.message
             })
         }
         res.status(200).json({
