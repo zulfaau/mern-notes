@@ -24,11 +24,18 @@ async function dbInit() {
       // Buat koneksi ke MySQL
         const connection = await mysql.createConnection(connectionConfig);
     
-        // Baca file init.sql secara aman untuk local dan Vercel
-        const path = require('path');
-        const initSql = await fs.readFile(path.join(__dirname, 'init.sql'), 'utf8');
-    
-        // Eksekusi init.sql
+        // Eksekusi SQL inisialisasi tabel secara langsung (inlined) untuk kompatibilitas Vercel
+        const initSql = `
+            CREATE TABLE IF NOT EXISTS notes (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                judul VARCHAR(255) NOT NULL,
+                tanggal DATETIME NOT NULL,
+                isi TEXT NOT NULL,
+                tema VARCHAR(20) NOT NULL,
+                pinned TINYINT(1) DEFAULT 0,
+                createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
         await connection.query(initSql);
         
         // Tambah kolom pinned jika tabel sudah ada sebelumnya tanpa kolom pinned
